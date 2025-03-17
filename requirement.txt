@@ -1,0 +1,5 @@
+passlib
+python-jose
+SQLAlchemy
+dotenv
+fastapi
