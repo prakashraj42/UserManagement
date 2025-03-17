@@ -15,9 +15,8 @@ def createuser(db: Session, user_data: UserCreate):
 
     db.add(db_user)
     db.commit()
-    db.flush()
     db.refresh(db_user)
-    print(db.query(user).all())  # Check if any data exists
+    print(db.query(user).all())  
     return db_user 
 
 

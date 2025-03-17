@@ -23,3 +23,4 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="User creation failed")
 
     return new_user
+
