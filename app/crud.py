@@ -28,3 +28,7 @@ def get_user_by_email(db : Session, email : str):
 def get_user_by_id(db : Session , id : str):
     return db.query(user).filter(user.id == id).first()
 
+#list all users from db
+def list_users(db : Session , skip : int = 0 ,limit : int = 10 ):
+    return db.query(user).offset(skip).limit(limit).all()
+
