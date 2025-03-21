@@ -11,9 +11,14 @@ org = APIRouter()
 @org.post("/organization/", response_model=OrganizationResponse)
 def Create_organization(org_data : OrganizationCreate, db : Session = Depends(get_db)):
     if get_org_by_email(db, org_data.email):
-        raise HTTPException(status_code= 404, detail= " Email already exists")
+        raise HTTPException(status_code= 404, detail= "Email already exists")
     
-    org = create_org(db, org_data)
+    orgs = create_org(db, org_data)
 
-    return {"msg" : "organization created successfully", "id":org.id}
+    return {
+        "id": orgs.id,
+        "email": orgs.email,
+        "orgname": orgs.orgname,  
+        "msg": "organization created successfully"
+    }
 
