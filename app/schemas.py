@@ -30,3 +30,16 @@ class OrganizationResponse(BaseModel):
     orgname : str
 
 
+class LoginRequest(BaseModel):
+    email : str
+    password: str
+
+
+class OrgTokenResponse(BaseModel):
+
+    org_id : str
+    access_token :str
+    token_type: str
+
+class UserTokenResponse(BaseModel):
+    pass

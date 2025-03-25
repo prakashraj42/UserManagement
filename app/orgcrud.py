@@ -18,7 +18,6 @@ def create_org(db: Session, request : OrganizationCreate):
 
     )
 
-
     db.add(org_data)
     db.commit()
     db.refresh(org_data)
@@ -27,3 +26,5 @@ def create_org(db: Session, request : OrganizationCreate):
 
 def get_org_by_email(db : Session, email : str):
     return db.query(Organization).filter(Organization.email == email).first()
+
+

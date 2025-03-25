@@ -3,7 +3,6 @@ from fastapi import APIRouter, HTTPException, Depends
 from app.database import get_db
 from app.schemas import OrganizationCreate, OrganizationResponse
 from app.orgcrud import create_org, get_org_by_email
-from app.core.security import verify_password, create_access_token
 
 
 org = APIRouter()
