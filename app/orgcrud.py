@@ -28,3 +28,5 @@ def get_org_by_email(db : Session, email : str):
     return db.query(Organization).filter(Organization.email == email).first()
 
 
+def list_org(db : Session , skip : int = 0 ,limit : int = 10 ):
+    return db.query(Organization).offset(skip).limit(limit).all()
