@@ -63,16 +63,15 @@ def get_user(user_id : int, org_data: str = Depends(get_current_user), db : Sess
 def listing_users(skip: int = 0, limit: int= 10 , org_data: str = Depends(get_current_user), db :Session =Depends(get_db)):
     org_id = org_data.org_id
     users = list_users(db, org_id, skip, limit)
-    #users = list_users(db , org_id=org_id, skip=skip , limit=limit, )
     return users
 
 
 #delete user
 @router.delete("/user/", response_model= dict)
-def deleting_user(user_id : int , db :Session = Depends(get_db)):
-    
+def deleting_user(user_id : int ,org_data: str = Depends(get_current_user), db :Session = Depends(get_db)):
+    org_id = org_data.org_id
     #get given id users from db
-    users = get_user_by_id(db,user_id)
+    users = get_user_by_id(db, org_id, user_id)
     
     #check if the are in the database
     if not users:
