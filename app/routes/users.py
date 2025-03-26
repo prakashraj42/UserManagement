@@ -3,27 +3,32 @@ from fastapi import APIRouter, HTTPException, Depends
 from app.database import get_db
 from app.schemas import UserCreate, UserResponse
 from app.crud import get_user_by_email, createuser ,get_user_by_id , list_users
-from app.core.security import verify_password, create_access_token
+from app.core.security import get_current_user
 
 
 router = APIRouter()
 
 #Create the user registeration 
-@router.post("/register/", response_model=UserResponse)
+@router.post("/register/")
 #Get the usercreate schema and get the input from users
-def user_register(user: UserCreate, db: Session = Depends(get_db)):
+def user_register(user: UserCreate, org_data: str = Depends(get_current_user), db : Session = Depends(get_db)):
+
+    #  Get the Org Id from Org data
+    org_id = org_data.org_id
+
     #Check if the user already exist in our db 
+    
     if get_user_by_email(db, user.email):
         raise HTTPException(status_code=400, detail="Email ID already exists")
     
     #call the create user function from crud.py
-    new_user = createuser(db, user)
+    new_user = createuser(db=db, user_data=user, org_id=org_id)
     
     #If the user input wrong data return error
     if not new_user:
         raise HTTPException(status_code=500, detail="User creation failed")
     #Return the user input data
-    return new_user
+    return {"msg": "user created successfully"}
 
 
 #get the user by email 
@@ -31,7 +36,6 @@ def user_register(user: UserCreate, db: Session = Depends(get_db)):
 def get_user(user_mail : str, db: Session = Depends(get_db)):
     #call the get user function from crud.py and depends from database.py
     user = get_user_by_email(db, user_mail) 
-    
     #check the user are in the data base if not retun the error
     if user is None:
         raise HTTPException(status_code= 404 , detail= "User Not Found")

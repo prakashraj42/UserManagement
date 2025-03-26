@@ -3,3 +3,4 @@ python-jose
 SQLAlchemy
 dotenv
 fastapi
+PyJWT

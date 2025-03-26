@@ -1,22 +1,8 @@
-from sqlalchemy import Column, String, Integer,ForeignKey
+from sqlalchemy import Column, String, Integer, ForeignKey
 from app.database import Base
 from sqlalchemy.orm import relationship
 import random
 import string
-
-
-
-class User(Base):
-
-    __tablename__ = "user"
-
-    id = Column (Integer, primary_key=True, index=True)
-    username = Column(String, index = True, nullable = False)
-    email = Column(String, unique = True, index = True, nullable = False)
-    hashed_password  = Column(String, nullable = False)
-    org_id = Column(String, ForeignKey("organization.id", ondelete="CASCADE"), nullable=False)
-
-    organization = relationship("Organization", back_populates="users")
 
 
 def generate_unique_id(length = 10):
@@ -26,9 +12,10 @@ def generate_unique_id(length = 10):
 
 class Organization(Base):
 
-    __tablename__ = "organization"
-
-    id = Column(String(10), primary_key=True, index=True, default=generate_unique_id())
+    __tablename__ = "organizations"
+    
+    id = Column (Integer, primary_key=True, index=True)
+    org_id = Column(String(10), default=generate_unique_id(), unique= True)
     orgname = Column(String, index = True , nullable =False)
     email = Column(String, unique = True, index = True, nullable = False)
     hashed_password  = Column(String, nullable = False)
@@ -38,6 +25,21 @@ class Organization(Base):
     country = Column(String, index = True , nullable =False)
 
     users = relationship("User", back_populates="organization")
+
+
+class User(Base):
+
+    __tablename__ = "users"
+
+    id = Column (Integer, primary_key=True, index=True)
+    username = Column(String, index = True, nullable = False)
+    email = Column(String, unique = True, index = True, nullable = False)
+    hashed_password  = Column(String, nullable = False)
+    org_id = Column(String, ForeignKey("organizations.org_id"))
+
+    organization = relationship("Organization", back_populates="users")
+
+
 
 
 

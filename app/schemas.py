@@ -25,7 +25,7 @@ class OrganizationCreate(BaseModel):
 
 class OrganizationResponse(BaseModel):
 
-    id : str
+    id : int
     email: EmailStr
     orgname : str
 
