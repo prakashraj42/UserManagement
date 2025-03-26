@@ -5,8 +5,10 @@ from app.core.security import get_password_hash
 from fastapi import APIRouter, Depends, HTTPException
 from app.database import get_db
 from app.schemas import UserCreate
-from app.core.security import hash_password
-from app.auth import get_current_user
+
+
+
+
 #Create the new user
 def createuser(db: Session, user_data: UserCreate): 
     #hashed the user given password
@@ -36,22 +38,3 @@ def get_user_by_id(db : Session , id : str):
 def list_users(db : Session , skip : int = 0 ,limit : int = 10 ):
     return db.query(User).offset(skip).limit(limit).all()
 
-def create_user(
-    user_data: UserCreate,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
-):
-    if current_user["role"] != "organization":
-        raise HTTPException(status_code=403, detail="Only organizations can create users")
-
-    new_user = User(
-        email=user_data.email,
-        hashed_password=hash_password(user_data.password),
-        org_id=current_user["org_id"]  # Assigning to logged-in org
-    )
-
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return {"msg": "User created successfully", "user_id": new_user.id, "org_id": new_user.org_id}
