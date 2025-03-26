@@ -33,9 +33,10 @@ def user_register(user: UserCreate, org_data: str = Depends(get_current_user), d
 
 #get the user by email 
 @router.get("/user/{user_mail}", response_model= UserResponse ,description= "get the user by email")
-def get_user(user_mail : str, db: Session = Depends(get_db)):
+def get_user(user_mail : str,org_data: str = Depends(get_current_user), db: Session = Depends(get_db)):
+    org_id = org_data.org_id
     #call the get user function from crud.py and depends from database.py
-    user = get_user_by_email(db, user_mail) 
+    user = get_user_by_email(db=db, email=user_mail,org_id=org_id) 
     #check the user are in the data base if not retun the error
     if user is None:
         raise HTTPException(status_code= 404 , detail= "User Not Found")
@@ -45,9 +46,10 @@ def get_user(user_mail : str, db: Session = Depends(get_db)):
 
 #get the user by email 
 @router.get("/user/{user_id}" , response_model= UserResponse , description=  "get the user by userid" )
-def get_user(user_id : int, db : Session = Depends(get_db)):
+def get_user(user_id : int, org_data: str = Depends(get_current_user), db : Session = Depends(get_db)):
+    org_id = org_data.org_id
     #call the get user function from crud.py and depends from database.py
-    user = get_user_by_id(db, user_id)
+    user = get_user_by_id(db=db, org_id=org_id, id=user_id)
     
     #check the user are in the data base if not retun the error
     if user is None:
@@ -58,8 +60,10 @@ def get_user(user_id : int, db : Session = Depends(get_db)):
 
 #list users
 @router.get("/users/", response_model=list[UserResponse])
-def listing_users(skip: int = 0, limit: int= 10 , db :Session =Depends(get_db)):
-    users = list_users(db , skip=skip , limit=limit)
+def listing_users(skip: int = 0, limit: int= 10 , org_data: str = Depends(get_current_user), db :Session =Depends(get_db)):
+    org_id = org_data.org_id
+    users = list_users(db, org_id, skip, limit)
+    #users = list_users(db , org_id=org_id, skip=skip , limit=limit, )
     return users
 
 

@@ -28,14 +28,14 @@ def createuser(db: Session, user_data: UserCreate, org_id: str):
     return db_user 
 
 #Get the user by email 
-def get_user_by_email(db : Session, email : str):
-    return db.query(User).filter(User.email == email).first()
+def get_user_by_email(db : Session, org_id: str, email : str):
+    return db.query(User).filter(User.email == email, User.org_id == org_id).first()
 
 #Get the user by db id
-def get_user_by_id(db : Session , id : str):
-    return db.query(User).filter(User.id == id).first()
+def get_user_by_id(db : Session, org_id: str , id : str):
+    return db.query(User).filter(User.id == id, User.org_id == org_id).first()
 
 #list all users from db
-def list_users(db : Session , skip : int = 0 ,limit : int = 10 ):
-    return db.query(User).offset(skip).limit(limit).all()
+def list_users(db: Session, org_id: str, skip: int = 0, limit: int = 10):
+    return db.query(User).filter(User.org_id == org_id).offset(skip).limit(limit).all()
 
