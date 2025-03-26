@@ -5,19 +5,20 @@ from app.core.security import get_password_hash
 from fastapi import APIRouter, Depends, HTTPException
 from app.database import get_db
 from app.schemas import UserCreate
-
+from app.core.security import get_current_user
 
 
 
 #Create the new user
-def createuser(db: Session, user_data: UserCreate): 
+def createuser(db: Session, user_data: UserCreate, org_id: str): 
     #hashed the user given password
     hashed_password = get_password_hash(user_data.password)  
     #Get the user data and sote in the variable 
     db_user = User(  
         username=user_data.username,
         email=user_data.email,
-        hashed_password=hashed_password
+        hashed_password=hashed_password,
+        org_id= org_id
     )
     #Added the user user_data in to databse
     db.add(db_user)

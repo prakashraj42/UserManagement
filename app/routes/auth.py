@@ -11,14 +11,14 @@ auth = APIRouter()
 def org_admin_login(form_data : OAuth2PasswordRequestForm = Depends(), db: Session=Depends(get_db)):
 
     org = db.query(Organization).filter(Organization.email == form_data.username).first()
-    print (form_data.username)
-    print (org.email)
+
     if not org:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Organization not found")
 
     if not verify_password(form_data.password, org.hashed_password):  
+        
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password")
 
-    access_token = create_access_token(data={"sub": org.email, "role": "organization", "org_id": org.id})
+    access_token = create_access_token(data={"sub": org.email, "role": "organization", "org_id": org.org_id})
 
-    return {"access_toke" : access_token, "token_type": "bearer"}
+    return {"access_token" : access_token, "token_type": "bearer"}
