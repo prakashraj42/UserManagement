@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, ForeignKey,Boolean
 from app.database import Base
 from sqlalchemy.orm import relationship
 import random
@@ -16,13 +16,14 @@ class Organization(Base):
     
     id = Column (Integer, primary_key=True, index=True)
     org_id = Column(String(10), default=generate_unique_id(), unique= True)
-    orgname = Column(String, index = True , nullable =False)
-    email = Column(String, unique = True, index = True, nullable = False)
-    hashed_password  = Column(String, nullable = False)
-    firstname = Column(String, index = True , nullable =False)
-    lastname = Column(String, index = True , nullable =False)
-    mobileno = Column(String, index = True , nullable =False)
-    country = Column(String, index = True , nullable =False)
+    orgname = Column(String, index = True , nullable =True)
+    email = Column(String, unique = True, index = True, nullable = True)
+    hashed_password  = Column(String, nullable = True)
+    firstname = Column(String, index = True , nullable =True)
+    lastname = Column(String, index = True , nullable =True)
+    mobileno = Column(String, index = True , nullable =True)
+    country = Column(String, index = True , nullable =True)
+    otp_verified = Column(Boolean, default=False)
 
     users = relationship("User", back_populates="organization")
 
@@ -38,7 +39,6 @@ class User(Base):
     org_id = Column(String, ForeignKey("organizations.org_id"))
 
     organization = relationship("Organization", back_populates="users")
-
 
 
 
