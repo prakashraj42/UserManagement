@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.database import get_db
 from app.schemas import UserCreate
 from app.core.security import get_current_user
-
+from app.email import send_org_reg_mail
 
 
 #Create the new user
@@ -20,6 +20,7 @@ def createuser(db: Session, user_data: UserCreate, org_id: str):
         hashed_password=hashed_password,
         org_id= org_id
     )
+    send_org_reg_mail(user_data.email, user_data.name, "user")
     #Added the user user_data in to databse
     db.add(db_user)
     db.commit()

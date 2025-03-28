@@ -29,6 +29,10 @@ class OrganizationResponse(BaseModel):
     email: EmailStr
     orgname : str
 
+class OTPVerify(BaseModel):
+    email: EmailStr
+    otp: str
+
 
 class LoginRequest(BaseModel):
     email : str
@@ -40,6 +44,8 @@ class OrgTokenResponse(BaseModel):
     org_id : str
     access_token :str
     token_type: str
+
+
 
 class UserTokenResponse(BaseModel):
     pass

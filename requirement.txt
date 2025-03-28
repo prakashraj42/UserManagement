@@ -4,3 +4,4 @@ SQLAlchemy
 dotenv
 fastapi
 PyJWT
+fastapi-mail
