@@ -5,3 +5,6 @@ dotenv
 fastapi
 PyJWT
 fastapi-mail
+psycopg2
+python-multipart
+redis

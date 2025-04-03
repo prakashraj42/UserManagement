@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: fastapi_app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - DATABASE_URL=postgresql://postgres:prakash%40123@db:5432/user_db
+      - SECRET_KEY=123qwe
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - ALGORITHM=HS256
+      - EMAIL_USERNAME=prakashraj42mk@gmail.com
+      - EMAIL_PASSWORD=upmm vxoh svfn qtlm
+      - MAIL_FROM=prakashraj42mk@gmail.com
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: prakash@123
+      POSTGRES_DB: user_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7
+    container_name: redis_container
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
